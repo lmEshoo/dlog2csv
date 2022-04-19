@@ -1,11 +1,5 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-    echo "This script converts a default KeySight dlog file to a KeySight csv"
-    echo "The heavy-lifting of the number conversion is done by dlogToCsv.m using GNU/Octave"
-    echo "Output: out.csv and out_bare.csv"
-    echo "Usage: "$0" filename.dlog output.csv"
-else
     temp_file=`mktemp`
     cp $1 $temp_file
     period=`grep -aoe "<tint>.*</tint>" $temp_file`
@@ -32,6 +26,5 @@ else
 #    echo $cm
     sed -i $cm $temp_file
 
-    octave -q ./dlogToCsv.m $temp_file $period $2
+    octave -q ./dlogToCsv.m $temp_file $period /app/output/"$(basename "$1" | sed 's/\(.*\)\..*/\1/')".csv
     rm $temp_file
-fi
